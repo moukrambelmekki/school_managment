@@ -1,4 +1,8 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL =
+  window.__API_BASE_URL__ ||
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000/api'
+    : 'https://school-managment-6dg6.onrender.com/api');
 
 const loginSection = document.getElementById('loginSection');
 const dashboardSection = document.getElementById('dashboardSection');
