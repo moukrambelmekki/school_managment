@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>School Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="background-shape bg1"></div>
+    <div class="background-shape bg2"></div>
+
+    <main class="app-shell">
+      <section id="loginSection" class="card">
+        <p class="kicker">Enrollment Platform</p>
+        <h1>School Management</h1>
+        <p class="subtitle">Sign in to manage students and registrations</p>
+        <form id="loginForm" class="grid-form">
+          <label>
+            Username
+            <input type="text" id="username" required />
+          </label>
+          <label>
+            Password
+            <input type="password" id="password" required />
+          </label>
+          <button type="submit">Login</button>
+        </form>
+       
+      </section>
+
+      <section id="dashboardSection" class="hidden">
+        <div class="dashboard-layout">
+          <aside class="card sidebar">
+            <p class="kicker">Navigation</p>
+            <h2>Sections</h2>
+            <p id="currentUser"></p>
+            <nav class="side-nav">
+              <button class="nav-link active" data-section-target="overviewSection">Overview</button>
+              <button class="nav-link" data-section-target="studentsSection">Students</button>
+              <button id="adminUsersNav" class="nav-link hidden" data-section-target="usersSection">Users (Admin)</button>
+            </nav>
+            <button id="themeToggleBtn" class="theme-toggle" type="button">Switch to Dark</button>
+            <button id="logoutBtn" class="secondary">Logout</button>
+          </aside>
+
+          <div class="main-content">
+            <section id="overviewSection" class="page-section active-section">
+              <header class="topbar card">
+                <div>
+                  <p class="kicker">Overview</p>
+                  <h2>Dashboard Overview</h2>
+                  <p class="subtitle">Quick insights about registrations</p>
+                </div>
+              </header>
+
+              <section class="stats-grid">
+                <article class="card stat-card">
+                  <h3>Total Students</h3>
+                  <p id="totalStudents">0</p>
+                </article>
+                <article class="card stat-card">
+                  <h3>Students by Level</h3>
+                  <ul id="levelStats"></ul>
+                </article>
+              </section>
+            </section>
+
+            <section id="studentsSection" class="page-section hidden">
+              <section class="card">
+                <h3>Add / Edit Student</h3>
+                <form id="studentForm" class="grid-form student-grid">
+                  <input type="hidden" id="studentId" />
+                  <label>First Name <input type="text" id="first_name" required /></label>
+                  <label>Last Name <input type="text" id="last_name" required /></label>
+                  <label>Date of Birth <input type="date" id="date_birthday" required /></label>
+                  <label>
+                    Gender
+                    <select id="sexe" required>
+                      <option value="">Select</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </label>
+                  <label>Class Name <input type="text" id="class_name" required /></label>
+                  <label>
+                    Level
+                    <select id="level" required>
+                      <option value="">Select</option>
+                      <option value="1st MS">1st MS</option>
+                      <option value="2nd MS">2nd MS</option>
+                      <option value="3rd MS">3rd MS</option>
+                      <option value="4th MS">4th MS</option>
+                    </select>
+                  </label>
+                  <button type="submit" id="submitBtn">Save Student</button>
+                  <button type="button" id="resetBtn" class="secondary">Clear</button>
+                </form>
+              </section>
+
+              <section class="card">
+                <div class="table-header">
+                  <h3>Students</h3>
+                  <input type="text" id="searchInput" placeholder="Search by name or class" />
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Birthday</th>
+                        <th>Gender</th>
+                        <th>Class</th>
+                        <th>Level</th>
+                        <th>Registered</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="studentsTableBody"></tbody>
+                  </table>
+                </div>
+              </section>
+            </section>
+
+            <section id="usersSection" class="page-section hidden">
+              <section class="card">
+                <h3>Create User Account (Admin)</h3>
+                <form id="userForm" class="grid-form user-grid">
+                  <label>Username <input type="text" id="new_username" required /></label>
+                  <label>Password <input type="password" id="new_password" required /></label>
+                  <label>
+                    Role
+                    <select id="new_role" required>
+                      <option value="Staff">Staff</option>
+                      <option value="Admin">Admin</option>
+                    </select>
+                  </label>
+                  <button type="submit">Create User</button>
+                </form>
+              </section>
+
+              <section class="card">
+                <h3>Users List</h3>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Created At</th>
+                      </tr>
+                    </thead>
+                    <tbody id="usersTableBody"></tbody>
+                  </table>
+                </div>
+              </section>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
