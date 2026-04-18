@@ -59,19 +59,58 @@
                 <div>
                   <p class="kicker">Overview</p>
                   <h2>Dashboard Overview</h2>
-                  <p class="subtitle">Quick insights about registrations</p>
+                  <p class="subtitle">Advanced insights by level, class, and gender</p>
                 </div>
               </header>
 
-              <section class="stats-grid">
-                <article class="card stat-card">
+              <section class="stats-grid summary-grid">
+                <article class="card stat-card summary-card total">
                   <h3>Total Students</h3>
                   <p id="totalStudents">0</p>
                 </article>
-                <article class="card stat-card">
-                  <h3>Students by Level</h3>
-                  <ul id="levelStats"></ul>
+                <article class="card stat-card summary-card male">
+                  <h3>Male Students</h3>
+                  <p id="maleStudents">0</p>
                 </article>
+                <article class="card stat-card summary-card female">
+                  <h3>Female Students</h3>
+                  <p id="femaleStudents">0</p>
+                </article>
+              </section>
+
+              <section class="card">
+                <div class="section-head">
+                  <h3>Students by Level</h3>
+                  <p class="hint">Distribution of registrations across academic levels</p>
+                </div>
+                <div id="levelCards" class="level-cards"></div>
+              </section>
+
+              <section class="card">
+                <div class="section-head">
+                  <h3>Classes by Level</h3>
+                  <p class="hint">How many classes exist in each level</p>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Level</th>
+                        <th>Students</th>
+                        <th>Classes Count</th>
+                      </tr>
+                    </thead>
+                    <tbody id="levelClassSummaryBody"></tbody>
+                  </table>
+                </div>
+              </section>
+
+              <section class="card">
+                <div class="section-head">
+                  <h3>Gender by Class</h3>
+                  <p class="hint">Male/Female distribution for each class in every level</p>
+                </div>
+                <div id="classGenderCards" class="class-gender-grid"></div>
               </section>
             </section>
 

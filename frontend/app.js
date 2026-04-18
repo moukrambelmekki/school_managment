@@ -12,7 +12,11 @@ const studentsTableBody = document.getElementById('studentsTableBody');
 const usersTableBody = document.getElementById('usersTableBody');
 const searchInput = document.getElementById('searchInput');
 const totalStudentsEl = document.getElementById('totalStudents');
-const levelStatsEl = document.getElementById('levelStats');
+const maleStudentsEl = document.getElementById('maleStudents');
+const femaleStudentsEl = document.getElementById('femaleStudents');
+const levelCardsEl = document.getElementById('levelCards');
+const levelClassSummaryBodyEl = document.getElementById('levelClassSummaryBody');
+const classGenderCardsEl = document.getElementById('classGenderCards');
 const currentUserEl = document.getElementById('currentUser');
 const resetBtn = document.getElementById('resetBtn');
 const logoutBtn = document.getElementById('logoutBtn');
@@ -183,19 +187,115 @@ const loadStudents = async () => {
 
 const loadStats = async () => {
   const stats = await api('/dashboard/stats');
-  totalStudentsEl.textContent = stats.totalStudents;
+  const totalStudents = Number(stats.totalStudents || 0);
+  const byLevel = Array.isArray(stats.byLevel) ? stats.byLevel : [];
+  const classesByLevel = Array.isArray(stats.classesByLevel) ? stats.classesByLevel : [];
+  const byGender = stats.byGender || { Male: 0, Female: 0 };
 
-  levelStatsEl.innerHTML = '';
-  if (!stats.byLevel.length) {
-    levelStatsEl.innerHTML = '<li>No data yet.</li>';
-    return;
+  totalStudentsEl.textContent = totalStudents;
+
+  if (maleStudentsEl) {
+    maleStudentsEl.textContent = Number(byGender.Male || 0);
   }
 
-  stats.byLevel.forEach((item) => {
-    const li = document.createElement('li');
-    li.textContent = `${item.level}: ${item.count}`;
-    levelStatsEl.appendChild(li);
-  });
+  if (femaleStudentsEl) {
+    femaleStudentsEl.textContent = Number(byGender.Female || 0);
+  }
+
+  if (levelCardsEl) {
+    if (!byLevel.length) {
+      levelCardsEl.innerHTML = '<p class="empty-block">No level data yet.</p>';
+    } else {
+      levelCardsEl.innerHTML = byLevel
+        .map((item) => {
+          const count = Number(item.count || 0);
+          const percent = totalStudents ? Math.round((count / totalStudents) * 100) : 0;
+          return `
+            <article class="level-card">
+              <h4>${item.level}</h4>
+              <p class="value">${count}</p>
+              <p class="meta">${percent}% of total students</p>
+              <div class="progress-track" role="presentation">
+                <span class="progress-fill" style="width: ${percent}%"></span>
+              </div>
+            </article>
+          `;
+        })
+        .join('');
+    }
+  }
+
+  if (levelClassSummaryBodyEl) {
+    if (!classesByLevel.length) {
+      levelClassSummaryBodyEl.innerHTML = '<tr><td colspan="3">No class-level data yet.</td></tr>';
+    } else {
+      const levelToStudents = byLevel.reduce((acc, item) => {
+        acc[item.level] = item.count;
+        return acc;
+      }, {});
+
+      levelClassSummaryBodyEl.innerHTML = classesByLevel
+        .map(
+          (item) => `
+            <tr>
+              <td>${item.level}</td>
+              <td>${levelToStudents[item.level] || 0}</td>
+              <td>${item.classCount || 0}</td>
+            </tr>
+          `
+        )
+        .join('');
+    }
+  }
+
+  if (classGenderCardsEl) {
+    if (!classesByLevel.length) {
+      classGenderCardsEl.innerHTML = '<p class="empty-block">No class breakdown available.</p>';
+    } else {
+      classGenderCardsEl.innerHTML = classesByLevel
+        .map((levelItem) => {
+          const classes = Array.isArray(levelItem.classes) ? levelItem.classes : [];
+
+          const classRows = classes.length
+            ? classes
+                .map(
+                  (classItem) => `
+                    <tr>
+                      <td>${classItem.class_name}</td>
+                      <td>${classItem.total}</td>
+                      <td>${classItem.male}</td>
+                      <td>${classItem.female}</td>
+                    </tr>
+                  `
+                )
+                .join('')
+            : '<tr><td colspan="4">No classes in this level.</td></tr>';
+
+          return `
+            <article class="level-group-card">
+              <header>
+                <h4>${levelItem.level}</h4>
+                <p>${levelItem.classCount || 0} classes</p>
+              </header>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Class</th>
+                      <th>Total</th>
+                      <th>Male</th>
+                      <th>Female</th>
+                    </tr>
+                  </thead>
+                  <tbody>${classRows}</tbody>
+                </table>
+              </div>
+            </article>
+          `;
+        })
+        .join('');
+    }
+  }
 };
 
 const loadUsers = async () => {
